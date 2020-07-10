@@ -273,6 +273,17 @@ func (a *Adapter) AddPolicy(sec string, ptype string, rule []string) error {
 	return err
 }
 
+// AddPolicies adds many policies rules to the storage.
+func (a *Adapter) AddPolicies(sec string, ptype string, rules [][]string) error {
+	lines := make([]*CasbinRule, 0)
+	for _, rule := range rules {
+		line := savePolicyLine(ptype, rule)
+		lines = append(lines, line)
+	}
+	_, err := a.engine.Insert(lines)
+	return err
+}
+
 // RemovePolicy removes a policy rule from the storage.
 func (a *Adapter) RemovePolicy(sec string, ptype string, rule []string) error {
 	line := savePolicyLine(ptype, rule)
