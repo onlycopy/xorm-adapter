@@ -291,6 +291,16 @@ func (a *Adapter) RemovePolicy(sec string, ptype string, rule []string) error {
 	return err
 }
 
+// RemovePolicies removes a policy rule from the storage.
+func (a *Adapter) RemovePolicies(sec string, ptype string, rules [][]string) error {
+	var err error
+	for _, rule := range rules {
+		line := savePolicyLine(ptype, rule)
+		_, err = a.engine.Delete(line)
+	}
+	return err
+}
+
 // RemoveFilteredPolicy removes policy rules that match the filter from the storage.
 func (a *Adapter) RemoveFilteredPolicy(sec string, ptype string, fieldIndex int, fieldValues ...string) error {
 	line := &CasbinRule{PType: ptype}
